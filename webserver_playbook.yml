@@ -1,0 +1,34 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Update APT
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: Copy Apache configuration
+      copy:
+        src: files/config/apache2.conf
+        dest: /etc/apache2/sites-available/000-default.conf
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Copy index.html
+      copy:
+        src: files/site/index.html
+        dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+        mode: 0644
+
+    - name: Enable default website
+      file:
+        src: /etc/apache2/sites-available/000-default.conf
+        dest: /etc/apache2/sites-enabled/000-default.conf
+        state: link
+
+    - name: Restart Apache service
+      service:
+        name: apache2
+        state: restarted
