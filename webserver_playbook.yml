@@ -9,7 +9,7 @@
     - name: Copy Apache configuration
       copy:
         src: files/config/apache2.conf
-        dest: /etc/apache2/sites-available/000-default.conf
+        dest: 
         owner: root
         group: root
         mode: 0644
