@@ -1,34 +1,48 @@
+
 ---
-- hosts: all
+- name: Configure Apache2 Web Server
+  hosts: webservers
   become: yes
+
   tasks:
     - name: Update APT
-      ansible.builtin.apt:
-        update_cache: true
+      apt:
+        update_cache: yes
 
-    - name: Copy Apache configuration
+    - name: Install Python-apt
+      apt:
+        name: python-apt
+        state: latest
+
+    - name: Install Apache2
+      apt:
+        name: apache2
+        state: latest
+
+    - name: Copy Apache2 configuration file
       copy:
         src: files/config/apache2.conf
-        dest: 
+        dest: /etc/apache2/apache2.conf
         owner: root
         group: root
         mode: 0644
 
-    - name: Copy index.html
+    - name: Copy website file
       copy:
         src: files/site/index.html
         dest: /var/www/html/index.html
-        owner: www-data
-        group: www-data
+        owner: root
+        group: root
         mode: 0644
 
-    - name: Enable default website
+    - name: Create symbolic link for enabling site
       file:
-        src: /etc/apache2/sites-available/000-default.conf
-        dest: /etc/apache2/sites-enabled/000-default.conf
+        src: /etc/apache2/mods-available/headers.load
+        dest: /etc/apache2/mods-available/headers.load
         state: link
-
-    - name: Restart Apache service
+        force: yes
+    
+    - name: Restart Apache2
       service:
         name: apache2
         state: restarted
