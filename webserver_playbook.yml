@@ -1,8 +1,11 @@
 
 ---
-- name: Configure Apache2 Web Server
-  hosts: webservers
+- name: Configure Web Server
+  hosts: csc2510-ansible-web
   become: yes
+  roles:
+    - update_apt
+    - apache2
 
   tasks:
     - name: Update APT
