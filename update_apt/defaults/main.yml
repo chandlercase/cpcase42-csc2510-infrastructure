@@ -1,0 +1,4 @@
+---
+# defaults file for update_apt
+apache2_conf_file: apache2.conf
+index_file: index.html

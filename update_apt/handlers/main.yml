@@ -1,0 +1,6 @@
+---
+# handlers file for update_apt
+    - name: Restart Apache2
+      service:
+        name: apache2
+        state: restarted

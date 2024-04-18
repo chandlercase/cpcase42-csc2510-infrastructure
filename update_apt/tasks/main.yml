@@ -1,14 +1,11 @@
-
 ---
-- name: Configure Web Server
-  hosts: csc2510-ansible-web
+# tasks file for update_apt
+---
+- name: Configure Apache2 Web Server
+  hosts: webservers
   become: yes
 
   tasks:
-    - name: Update APT
-      apt:
-        update_cache: yes
-
     - name: Install Python-apt
       apt:
         name: python-apt
@@ -42,7 +39,8 @@
         state: link
         force: yes
     
-    - name: Restart Apache2
-      service:
-        name: apache2
-        state: restarted
+    - name: Copy Apache2 configuration file
+      ansible.builtin.copy:
+        src: "{{ apache2_conf_file }}"
+        dest: /etc/apache2/apache2.conf
+      notify: Restart Apache2
